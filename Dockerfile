@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Системные зависимости для сборки некоторых python-пакетов
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential curl \
+    build-essential curl postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
 # Poetry

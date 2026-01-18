@@ -6,7 +6,7 @@ from src.restfulapi.buildings import buildings
 from src.restfulapi.organizations import organizations
 
 
-app = FastAPI(title="RESTful API test task")
+app = FastAPI(title="RESTful API test task.txt")
 
 app.include_router(buildings.router)
 app.include_router(activities.router)

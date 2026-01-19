@@ -61,7 +61,6 @@ async def create_organization(payload: OrganizationCreate, db: AsyncSession = De
     await db.commit()
     await db.refresh(org)
 
-    # загрузим связи для ответа
     stmt = (
         select(Organization)
         .where(Organization.id == org.id)
@@ -88,7 +87,6 @@ def _apply_filters(
 
     if activity_id is not None:
         if include_children:
-            # recursive CTE to get all descendant activity IDs (including self)
             act = select(Activity.id, Activity.parent_id).where(Activity.id == activity_id).cte(recursive=True)
             act_alias = act.alias()
             act = act.union_all(select(Activity.id, Activity.parent_id).where(Activity.parent_id == act_alias.c.id))
@@ -138,7 +136,6 @@ async def organizations_in_radius(
     radius_m: float = Query(gt=0, le=200_000),
     db: AsyncSession = Depends(get_db),
 ) -> list[OrganizationOut]:
-    # грубый prefilter по bbox (ускоряет), потом точный haversine на питоне
     lat_delta = radius_m / 111_000.0
     lon_delta = radius_m / (111_000.0 * max(cos(radians(lat)), 0.1))
 
